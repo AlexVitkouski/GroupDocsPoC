@@ -47,7 +47,7 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(422, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(582, 623);
+            this.pictureBox1.Size = new System.Drawing.Size(612, 792);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
@@ -55,7 +55,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1049, 647);
+            this.ClientSize = new System.Drawing.Size(1072, 828);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnStart);
             this.Name = "MainForm";

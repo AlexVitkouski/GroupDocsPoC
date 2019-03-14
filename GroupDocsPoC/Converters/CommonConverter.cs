@@ -15,7 +15,7 @@ namespace GroupDocsPoC.Converters
         {
             Image image = null;
             int pageNumber = 0;
-            int resolution = 50;
+            int resolution = 80;
             using (FileStream fs = File.OpenRead(filePath))
             {
                 using (PreviewHandler handler = PreviewFactory.Load(fs))

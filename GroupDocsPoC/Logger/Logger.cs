@@ -23,14 +23,19 @@ namespace GroupDocsPoC.Logger
             var errorFileName = string.Format(ErrorLogNameTemplate, time);
             errorLogPath = Path.Combine(logFolderPath, errorFileName);
         }
+        
+        private void AddHeaders()
+        {
+            var logInfoHeader = "Time, File, Conversion, Render, Resize, Total, Status";
+            File.AppendAllLines(InfoLog, new[] { logInfoHeader });
+        }
 
         public Logger(string logFolderPath, string startTime)
         {
             SetLogsPath(logFolderPath, startTime, out string logPath, out string errorLogPath);
             InfoLog = logPath;
             ErrorLog = errorLogPath;
-            var logInfoHeader = "File, Conversion, Render, Total, Status";
-            File.AppendAllLines(logPath, new[] { logInfoHeader });
+            AddHeaders();
         }
         public void LogError(string message)
         {

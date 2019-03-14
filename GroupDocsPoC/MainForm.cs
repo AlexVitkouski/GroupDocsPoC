@@ -12,10 +12,12 @@ namespace GroupDocsPoC
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            const string pathToFolder = Common.PathTSrcFolder;
-            var testRunner = new TestRunner(pathToFolder, pictureBox1);
+            var button = (Button)sender;
+            button.Text = "Testing...";
+            var testRunner = new TestRunner(Common.PathTSrcFolder, pictureBox1);
             testRunner.Run();
             MessageBox.Show("Done.");
+            button.Text = "Start";
         }
     }
 }

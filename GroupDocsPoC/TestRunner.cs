@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ namespace GroupDocsPoC
         private readonly string PathToFolder;
         private readonly string PreviewFolderPath;
         private readonly PictureBox Picture;
+        private readonly Size PreviewSize = new Size(612, 792);
 
         public void Run()
         {
@@ -45,6 +47,7 @@ namespace GroupDocsPoC
             CreateFolders(pathToFolder, time, out var logFolderPath, out var previewFolderPath);
             PreviewFolderPath = previewFolderPath;
             Log = new Logger.Logger(logFolderPath, time);
+            pictureBox.Size = PreviewSize;
         }
 
         public void CreatePreviews(string pathToFolder, PictureBox pictureBox, string previewFolderPath)
@@ -57,18 +60,30 @@ namespace GroupDocsPoC
 
                 long renderTime = 0;
                 string status = image != null ? "Ok" : "Error";
+                long resizeTime = 0;
                 if (image != null)
                 {
                     status = "Ok";
+                    image = ResizeImage(image, PreviewSize, out resizeTime);
                     ShowPreview(pictureBox, image, out renderTime);
                     SavePreview(image, filePath, previewFolderPath);
                     image.Dispose();
                 }
 
-                var totalTime = conversionTime + renderTime;
+                var totalTime = conversionTime + resizeTime + renderTime;
                 var fileName = Path.GetFileName(filePath);
-                Log.LogInfo($"{fileName}, {conversionTime}, {renderTime}, {totalTime}, {status}");
+                Log.LogInfo($"{fileName}, {conversionTime}, {renderTime}, {resizeTime}, {totalTime}, {status}");
             }
+        }
+
+        public static Image ResizeImage(Image imgToResize, Size size, out long resizeTime)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Image result = new Bitmap(imgToResize, size);
+            sw.Stop();
+            resizeTime = sw.ElapsedMilliseconds;
+            return result;
         }
 
         private static void ShowPreview(PictureBox pictureBox, Image image, out long renderTime)
@@ -83,7 +98,7 @@ namespace GroupDocsPoC
 
         private static void SavePreview(Image image, string srcFileName, string previewFolderPath)
         {
-            var previewFileName = $"{Path.GetFileNameWithoutExtension(srcFileName)}.png";
+            var previewFileName = $"{Path.GetFileName(srcFileName)}.png";
             var previewPath = Path.Combine(previewFolderPath, previewFileName);
             image.Save(previewPath, System.Drawing.Imaging.ImageFormat.Png);
         }
